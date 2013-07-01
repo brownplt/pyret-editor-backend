@@ -1,14 +1,14 @@
 Author: Joe Gibbs Politz
 
 This is completely derivative of Danny Yoo's repl-prototype, from
-http://github.com/dyoo/whalesong.  I've repurposed it into a server for backing
-a browser-based Pyret REPL.  All bugs are my fault and all praise for
-engineering excellence belongs to Danny.
+http://github.com/dyoo/whalesong.  I've repurposed it into a server for
+backing a browser-based Pyret REPL.  All bugs are my fault and all praise
+for engineering excellence belongs to Danny.
 
 To use this, you need both Pyret and Whalesong installed and in your Racket
-collections path.  If you check out Pyret (http://github.com/brownplt/pyret),
-and run `make dep`, this will be done for you, with a Pyret-approved version of
-Whalesong.
+collections path.  If you check out Pyret
+(http://github.com/brownplt/pyret-lang), and run `make dep`, this will be
+done for you, with a Pyret-approved version of Whalesong.
 
 ----------------------------------------------------------------------
 
