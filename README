@@ -1,0 +1,36 @@
+Author: Joe Gibbs Politz
+
+This is completely derivative of Danny Yoo's repl-prototype, from
+http://github.com/dyoo/whalesong.  I've repurposed it into a server for backing
+a browser-based Pyret REPL.  All bugs are my fault and all praise for
+engineering excellence belongs to Danny.
+
+To use this, you need both Pyret and Whalesong installed and in your Racket
+collections path.  If you check out Pyret (http://github.com/brownplt/pyret),
+and run `make dep`, this will be done for you, with a Pyret-approved version of
+Whalesong.
+
+----------------------------------------------------------------------
+
+1.
+
+$ make pyret
+
+This runs 'write-runtime.rkt', and points it to your installation of Pyret
+(probably `raco link`ed).  This generates the runtime.js and library.js files
+in htdocs/collects.
+
+2.
+
+$ make run
+
+This starts server.rkt (listening on port 8080 to requests from localhost).
+
+To expose the server to the world, use
+
+$ make run-production
+
+----------------------------------------------------------------------
+
+TODO (maybe forever?): Try out the sandboxed server.
+
