@@ -112,6 +112,7 @@
             },
             function(err) {
                 console.error("Failed to load language: ", err);
+                console.log(err.message);
             });
     };
 
