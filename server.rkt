@@ -2,11 +2,14 @@
 
 (require json
          file/gzip
+         pyret/lang/typecheck
+         pyret/lang/well-formed
          racket/runtime-path
          racket/port
          racket/path
          racket/match
          racket/pretty
+         ragg/support
          web-server/servlet-env
          web-server/servlet
          "repl-compile.rkt"
@@ -77,11 +80,26 @@
                     [(list (or "t" "true"))
                      #t]
                     [else #f]))
+  (define (error-with-locs type message locs)
+    (define (loc->json l)
+      (hash 'source (srcloc-source l)
+            'line (srcloc-line l)
+            'column (srcloc-column l)))
+    (hash 'type type
+          'message message
+          'locs (map loc->json locs)))
   ;; Compile the program here...
   (with-handlers ([exn:fail? (lambda (exn)
-                               (write-json (hash 'type "error"
-                                                 'message (exn-message exn))
-                                           op))])
+                  (match exn
+                    [(exn:fail:parsing message cms locs)
+                     (write-json (error-with-locs "error" message locs) op)]
+                    [(exn:fail:pyret/tc message cms locs)
+                     (write-json (error-with-locs "error" message locs) op)]
+                    [(exn:fail:pyret/wf message cms locs)
+                     (write-json (error-with-locs "error" message locs) op)]
+                    [_ (write-json (hash 'type "error"
+                                         'message (exn-message exn))
+                                   op)]))])
     (define assembled-codes (whalesong-compile source-name src #:lang language #:options options))
     (write-json (hash 'type "repl"
                       'compiledCodes assembled-codes)
