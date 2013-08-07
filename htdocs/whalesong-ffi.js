@@ -15,6 +15,18 @@
     });
   }
 
+  function getPrimitive(name) {
+    return plt.runtime.Primitives[name];
+  }
+
+  function makeSymbol(sym) {
+     return plt.baselib.symbols.makeSymbol(sym)
+  }
+
+  function toArray(list) {
+    return plt.baselib.lists.listToArray(list);
+  }
+
   function getPyretLib(name) {
     var f = plt.runtime.currentMachine.modules["root/lang/pyret-lang-whalesong.rkt"].exports.get(name);
 
@@ -41,8 +53,11 @@
   }
 
   global.whalesongFFI = {
+    getPrimitive: getPrimitive,
     callRacketFun: callRacketFun,
     getPyretLib: getPyretLib,
-    callPyretFun: callPyretFun
+    callPyretFun: callPyretFun,
+    makeSymbol: makeSymbol,
+    toArray: toArray
   };
 })(this);
