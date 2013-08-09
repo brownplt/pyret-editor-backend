@@ -6,6 +6,7 @@
  (only-in whalesong/compiler/compiler compile-for-repl)
  whalesong/js-assembler/assemble
  racket/match
+ pyret/lang/type-env
  (only-in pyret pyret-read-syntax))
 
 (define this-namespace (make-base-empty-namespace))
@@ -53,11 +54,17 @@
 (define (repl-reader-for language options)
   (match language
     ['pyret/lang/pyret-lang-whalesong
-     (define check-mode (if (hash? options)
-                            (hash-ref options 'check #f)
-                            #f))
+     (define (get-option opt default)
+       (if (hash? options)
+           (hash-ref options opt default)
+           default))
+     (define check-mode (get-option 'check #f))
+     (define type-env
+      (if (get-option 'type-env WHALESONG-ENV)
+          WHALESONG-ENV
+          #f))
      (lambda (src in)
-      (pyret-read-syntax src in #:check check-mode))]
+      (pyret-read-syntax src in #:check check-mode #:type-env type-env))]
     ['racket/base read-syntax]))
 
 ;; Compiles code from str
