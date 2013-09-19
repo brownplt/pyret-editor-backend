@@ -4,6 +4,7 @@
          file/gzip
          pyret/lang/typecheck
          pyret/lang/well-formed
+         pyret/lang/indentation
          racket/runtime-path
          racket/port
          racket/path
@@ -96,6 +97,8 @@
                     [(exn:fail:pyret/tc message cms locs)
                      (write-json (error-with-locs "error" message locs) op)]
                     [(exn:fail:pyret/wf message cms locs)
+                     (write-json (error-with-locs "error" message locs) op)]
+                    [(exn:fail:pyret/indent message cms locs)
                      (write-json (error-with-locs "error" message locs) op)]
                     [_ (write-json (hash 'type "error"
                                          'message (exn-message exn))
