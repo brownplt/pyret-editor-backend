@@ -7,6 +7,7 @@
  whalesong/js-assembler/assemble
  racket/match
  pyret/lang/type-env
+ pyret/parameters
  (only-in pyret pyret-read-syntax))
 
 (define this-namespace (make-base-empty-namespace))
@@ -63,8 +64,12 @@
       (if (get-option 'type-env WHALESONG-ENV)
           WHALESONG-ENV
           #f))
+     (define allow-shadow (get-option 'allow-shadow #f))
+     (define additional-ids (get-option 'additional-ids #f))
+     (define extended-env (update-list-any (map string->symbol additional-ids) type-env))
      (lambda (src in)
-      (pyret-read-syntax src in #:check check-mode #:type-env type-env))]
+      (parameterize [(current-allow-shadowed-vars allow-shadow)]
+        (pyret-read-syntax src in #:check check-mode #:type-env extended-env)))]
     ['racket/base read-syntax]))
 
 ;; Compiles code from str
