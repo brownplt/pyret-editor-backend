@@ -66,7 +66,10 @@
           #f))
      (define allow-shadow (get-option 'allow-shadow #f))
      (define additional-ids (get-option 'additional-ids #f))
-     (define extended-env (update-list-any (map string->symbol additional-ids) type-env))
+     (define extended-env
+      (if (and type-env additional-ids)
+        (update-list-any (map string->symbol additional-ids) type-env)
+        type-env))
      (lambda (src in)
       (parameterize [(current-allow-shadowed-vars allow-shadow)]
         (pyret-read-syntax src in #:check check-mode #:type-env extended-env)))]
