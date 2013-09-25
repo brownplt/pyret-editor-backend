@@ -116,8 +116,9 @@
       (lambda ()
         (define assembled-codes
           (whalesong-compile source-name src #:lang language #:options options))
-        (cache-set (list src-hash language options)
-          assembled-codes)
+        (when (hash-ref options 'cache? #f)
+          (cache-set (list src-hash language options)
+            assembled-codes))
         assembled-codes)))
     (write-json (hash 'type "repl"
                       'compiledCodes output)
