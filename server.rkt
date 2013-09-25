@@ -1,6 +1,7 @@
 #lang racket/base
 
 (require json
+         file/md5
          file/gzip
          pyret/lang/typecheck
          pyret/lang/well-formed
@@ -68,6 +69,13 @@
       (extract-binding/single id (request-bindings req))
       #f))
   
+(define CACHE (make-hash))
+(define (in-cache? key)
+  (hash-has-key? CACHE key))
+(define (cache-set key item)
+  (hash-set! CACHE key item))
+(define (cache-get key else)
+  (hash-ref CACHE key else))
 
 (define (start req)
   (define-values (response op) 
@@ -103,9 +111,16 @@
                     [_ (write-json (hash 'type "error"
                                          'message (exn-message exn))
                                    op)]))])
-    (define assembled-codes (whalesong-compile source-name src #:lang language #:options options))
+    (define src-hash (md5 src))
+    (define output (cache-get (list src-hash language options)
+      (lambda ()
+        (define assembled-codes
+          (whalesong-compile source-name src #:lang language #:options options))
+        (cache-set (list src-hash language options)
+          assembled-codes)
+        assembled-codes)))
     (write-json (hash 'type "repl"
-                      'compiledCodes assembled-codes)
+                      'compiledCodes output)
                        op))
   (close-output-port op)
   response)
