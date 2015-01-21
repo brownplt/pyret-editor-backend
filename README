@@ -1,6 +1,8 @@
 Author: Joe Gibbs Politz
 
-*This repo was used for courses in Fall 2013 only.  It has nothing to do with code.pyret.org, whose repo is at https://github.com/brownplt/code.pyret.org.*
+NOTE NOTE NOTE
+
+This repo was used for courses in Fall 2013 only.  It has nothing to do with code.pyret.org, whose repo is at https://github.com/brownplt/code.pyret.org
 
 This is completely derivative of Danny Yoo's repl-prototype, from
 http://github.com/dyoo/whalesong.  I've repurposed it into a server for
